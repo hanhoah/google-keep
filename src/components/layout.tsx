@@ -10,9 +10,7 @@ export default function AppLayout({ children }) {
       <Layout>
         <Header />
         <Layout>
-          <div className="sidebar">
-            <Sider>Sider</Sider>
-          </div>
+          <Sider style={{ background: "#eee" }}>Sider</Sider>
           <Content>
             <main>{children}</main>
           </Content>
