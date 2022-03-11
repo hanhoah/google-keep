@@ -1,12 +1,24 @@
 import Header from "./Header";
 import Footer from "./Footer";
+import { Layout } from "antd";
 
-export default function Layout({ children }) {
+const { Sider, Content } = Layout;
+
+export default function AppLayout({ children }) {
   return (
     <>
-      <Header />
-      <main>{children}</main>
-      <Footer />
+      <Layout>
+        <Header />
+        <Layout>
+          <div className="sidebar">
+            <Sider>Sider</Sider>
+          </div>
+          <Content>
+            <main>{children}</main>
+          </Content>
+        </Layout>
+        <Footer />
+      </Layout>
     </>
   );
 }
