@@ -1,10 +1,9 @@
 import NoteItem from "../components/note/NoteItem";
 import Note from "../shared/types/Note";
-import initialNotes from "../shared/notes";
+//import initialNotes from "../shared/notes";
 import AddNoteForm from "../components/note/AddNoteForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-/*
 const getInitialNotes = async (): Promise<Note[]> => {
   console.log("getInitialNotes");
   const uri = "http://localhost:3001/notes";
@@ -13,18 +12,16 @@ const getInitialNotes = async (): Promise<Note[]> => {
   console.log("notes: ", notes);
   return notes;
 };
-*/
 
 export default function Home() {
-  const [notes, setNotes] = useState(initialNotes);
+  const [notes, setNotes] = useState<Note[]>([]);
 
-  /*
   useEffect(() => {
     console.log("Only running on mount");
-    const initialNotes = await getInitialNotes();
-    setNotes(initialNotes);
+    getInitialNotes().then((initialNotes) => {
+      setNotes(initialNotes);
+    });
   }, []);
-*/
 
   function addNote(note: Note) {
     setNotes((prev) => {

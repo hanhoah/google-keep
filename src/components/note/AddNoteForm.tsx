@@ -33,7 +33,7 @@ function AddNoteForm(props: Props) {
     e.preventDefault();
     setNote({ ...note, key: uuidv4() });
     props.addNote(note);
-    // setNote(emptyNote); cannot setNote to empty note because async
+    setNote(emptyNote); //cannot setNote to empty note because async
   };
 
   return (

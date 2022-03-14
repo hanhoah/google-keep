@@ -1,7 +1,11 @@
 import styles from "./NoteItem.module.css";
 import Note from "../../shared/types/Note";
-import { Button } from "antd";
+import { Modal, Button } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { Input } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+const { TextArea } = Input;
 
 interface Props {
   note: Note;
@@ -13,10 +17,61 @@ function NoteItem(props: Props) {
     props.deleteNote(props.note);
   };
 
+  //begin edit note modal
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    console.log("showing modal");
+    setIsModalVisible(true);
+  };
+
+  const handleOk = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation();
+    setIsModalVisible(false);
+    console.log("ok modal");
+  };
+
+  const handleCancel = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation();
+    console.log("cancel modal");
+    setIsModalVisible(false);
+  };
+  // end edit note modal
+
+  const note = props.note;
   return (
-    <div className={styles.note}>
-      <h1>{props.note.title}</h1>
-      <p>{props.note.content}</p>
+    <div onClick={showModal} className={styles.note}>
+      <h1>{note.title}</h1>
+      <p>{note.content}</p>
+      <Modal
+        title="Edit Note"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <form className={styles.form}>
+          <Input
+            value={note.title}
+            name="title"
+            placeholder="Title"
+            showCount
+            maxLength={20}
+          />
+          <br />
+          <br />
+          <TextArea
+            value={note.content}
+            name="content"
+            placeholder="Content"
+            showCount
+            maxLength={100}
+          />
+          <button className={styles.button}>
+            {" "}
+            <PlusOutlined />{" "}
+          </button>
+        </form>{" "}
+      </Modal>
       <Button
         onClick={onDeleteNote}
         type="primary"
