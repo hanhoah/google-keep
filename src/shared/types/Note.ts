@@ -1,5 +1,5 @@
 export default interface Note {
-  key: number;
+  key: string;
   title?: string;
   content?: string;
 }
