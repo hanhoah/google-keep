@@ -1,19 +1,20 @@
 import styles from "./NoteItem.module.css";
 import Note from "../../shared/types/Note";
 import { Modal, Button } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, CheckOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Input } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
 
 interface Props {
   note: Note;
   deleteNote: (note: Note) => void;
+  updateNote: (note: Note) => void;
 }
 
 function NoteItem(props: Props) {
-  const onDeleteNote = () => {
+  const onDeleteNote = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation();
     props.deleteNote(props.note);
   };
 
@@ -25,12 +26,6 @@ function NoteItem(props: Props) {
     setIsModalVisible(true);
   };
 
-  const handleOk = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    e.stopPropagation();
-    setIsModalVisible(false);
-    console.log("ok modal");
-  };
-
   const handleCancel = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
     console.log("cancel modal");
@@ -38,37 +33,59 @@ function NoteItem(props: Props) {
   };
   // end edit note modal
 
-  const note = props.note;
+  const [note, setNote] = useState(props.note);
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    props.updateNote(note);
+    setIsModalVisible(false);
+  };
+
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setNote((prevNote) => {
+      return {
+        ...prevNote,
+        [name]: value,
+      };
+    });
+  };
+
   return (
     <div onClick={showModal} className={styles.note}>
       <h1>{note.title}</h1>
-      <p>{note.content}</p>
+      <p>{note.content?.slice(0, 80)}</p>
       <Modal
         title="Edit Note"
         visible={isModalVisible}
-        onOk={handleOk}
         onCancel={handleCancel}
+        footer={null}
       >
-        <form className={styles.form}>
+        <form onSubmit={onSubmit} className={styles.form}>
           <Input
             value={note.title}
             name="title"
             placeholder="Title"
             showCount
-            maxLength={20}
+            maxLength={64}
+            onChange={onChange}
           />
           <br />
           <br />
           <TextArea
+            rows={5}
             value={note.content}
             name="content"
             placeholder="Content"
             showCount
-            maxLength={100}
+            maxLength={1024}
+            onChange={onChange}
           />
-          <button className={styles.button}>
+          <button type="submit" className={styles.button}>
             {" "}
-            <PlusOutlined />{" "}
+            <CheckOutlined />{" "}
           </button>
         </form>{" "}
       </Modal>

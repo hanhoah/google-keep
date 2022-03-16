@@ -3,6 +3,7 @@ import Note from "../shared/types/Note";
 //import initialNotes from "../shared/notes";
 import AddNoteForm from "../components/note/AddNoteForm";
 import { useEffect, useState } from "react";
+import { noteAPI } from "../api/jsonserver";
 
 const getInitialNotes = async (): Promise<Note[]> => {
   console.log("getInitialNotes");
@@ -21,7 +22,11 @@ export default function Home() {
     getInitialNotes().then((initialNotes) => {
       setNotes(initialNotes);
     });
-  }, []);
+  }, [notes]);
+
+  useEffect(() => {
+    console.log("Component did update");
+  });
 
   function addNote(note: Note) {
     setNotes((prev) => {
@@ -29,8 +34,20 @@ export default function Home() {
     });
   }
 
+  function updateNote(note: Note) {
+    console.log("updating note", note);
+    //patchData(note);
+    noteAPI("PATCH", `notes/${note.id}`, note);
+  }
+
   function deleteNote(note: Note) {
-    //console.log("deleting note ", note);
+    const result = notes.filter((current) => {
+      return current.id !== note.id;
+    });
+
+    setNotes(result);
+    //deleteItem(note);
+    noteAPI("DELETE", `notes/${note.id}`, note);
   }
 
   //console.log("notes: ", notes);
@@ -39,7 +56,12 @@ export default function Home() {
     <>
       <AddNoteForm addNote={addNote} />
       {notes.map((note) => (
-        <NoteItem key={note.key} note={note} deleteNote={deleteNote} />
+        <NoteItem
+          key={note.id}
+          note={note}
+          deleteNote={deleteNote}
+          updateNote={updateNote}
+        />
       ))}
     </>
   );

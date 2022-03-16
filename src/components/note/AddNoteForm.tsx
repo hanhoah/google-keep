@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 const { TextArea } = Input;
 import styles from "./AddNoteForm.module.css";
 import Note from "../../shared/types/Note";
-import { v4 as uuidv4 } from "uuid";
+import { noteAPI } from "../../api/jsonserver";
 
 interface Props {
   addNote: (note: Note) => void;
@@ -12,14 +12,16 @@ interface Props {
 
 function AddNoteForm(props: Props) {
   const emptyNote = {
-    key: "",
+    id: "",
     title: "",
     content: "",
   };
 
   const [note, setNote] = useState(emptyNote);
 
-  const onChange = (e: React.ChangeEvent) => {
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setNote((prevNote) => {
       return {
@@ -29,22 +31,23 @@ function AddNoteForm(props: Props) {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setNote({ ...note, key: uuidv4() });
     props.addNote(note);
-    setNote(emptyNote); //cannot setNote to empty note because async
+    setNote(emptyNote);
+    //postData(note);
+    noteAPI("POST", "notes", note);
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={onSubmit} className={styles.form}>
       Add new note
       <Input
         value={note.title}
         name="title"
         placeholder="Title"
         showCount
-        maxLength={20}
+        maxLength={64}
         onChange={onChange}
       />
       <br />
@@ -54,7 +57,7 @@ function AddNoteForm(props: Props) {
         name="content"
         placeholder="Content"
         showCount
-        maxLength={100}
+        maxLength={1024}
         onChange={onChange}
       />
       <button className={styles.button}>
