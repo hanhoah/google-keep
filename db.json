@@ -1,29 +1,69 @@
 {
   "notes": [
     {
-      "title": "hello ",
-      "content": "new note\n",
-      "id": 35
+      "title": "Hello ",
+      "content": "world",
+      "id": 1
     },
     {
-      "title": "hallo",
-      "content": "welt",
-      "id": 38
+      "title": "test",
+      "content": "test",
+      "id": 2
     },
     {
-      "title": "a new",
-      "content": "note",
-      "id": 39
+      "title": "123",
+      "content": "345",
+      "id": 3
     },
     {
-      "title": "neue notiz",
-      "content": "hallo welt",
-      "id": 44
+      "title": "cal",
+      "content": "Display a calendar",
+      "id": 4
     },
     {
-      "title": "hallo welt",
-      "content": "hallo welt",
-      "id": 45
+      "title": "chgrp",
+      "content": "Change group ownership",
+      "id": 5
+    },
+    {
+      "title": "chpasswd",
+      "content": "Update passwords in batch mode",
+      "id": 6
+    },
+    {
+      "title": "render()",
+      "content": "Render a React element into the DOM in the supplied container and return a reference to the component (or returns null for stateless components).\n\nIf the React element was previously rendered into container, this will perform an update on it and only mutate the DOM as necessary to reflect the latest React element.\n\nIf the optional callback is provided, it will be executed after the component is rendered or updated.",
+      "id": 7
+    },
+    {
+      "title": "hydrate()",
+      "content": "Same as render(), but is used to hydrate a container whose HTML contents were rendered by ReactDOMServer. React will attempt to attach event listeners to the existing markup.\n\nReact expects that the rendered content is identical between the server and the client. It can patch up differences in text content, but you should treat mismatches as bugs and fix them. In development mode, React warns about mismatches during hydration. There are no guarantees that attribute differences will be patched up in case of mismatches. This is important for performance reasons because in most apps, mismatches are rare, and so validating all markup would be prohibitively expensive.",
+      "id": 8
+    },
+    {
+      "title": "TestRenderer.act()",
+      "content": "Similar to the act() helper from react-dom/test-utils, TestRenderer.act prepares a component for assertions. Use this version of act() to wrap calls to TestRenderer.create and testRenderer.update.",
+      "id": 9
+    },
+    {
+      "title": "unmountComponentAtNode()",
+      "content": "Remove a mounted React component from the DOM and clean up its event handlers and state. If no component was mounted in the container, calling this function does nothing. Returns true if a component was unmounted and false if there was no component to unmount.",
+      "id": 10
+    },
+    {
+      "title": "useState",
+      "content": "Returns a stateful value, and a function to update it.\n\nDuring the initial render, the returned state (state) is the same as the value passed as the first argument (initialState).\n\nThe setState function is used to update the state. It accepts a new state value and enqueues a re-render of the component.",
+      "id": 11
+    },
+    {
+      "title": "useContext",
+      "content": "Accepts a context object (the value returned from React.createContext) and returns the current context value for that context. The current context value is determined by the value prop of the nearest <MyContext.Provider> above the calling component in the tree.\n\nWhen the nearest <MyContext.Provider> above the component updates, this Hook will trigger a rerender with the latest context value passed to that MyContext provider. Even if an ancestor uses React.memo or shouldComponentUpdate, a rerender will still happen starting at the component itself using useContext.",
+      "id": 12
+    },
+    {
+      "title": "decodeURI()",
+      "content": "const uri = 'https://mozilla.org/?x=шеллы';\nconst encoded = encodeURI(uri);\nconsole.log(encoded);\n// expected output: \"https://mozilla.org/?x=%D1%88%D0%B5%D0%BB%D0%BB%D1%8B\"\n\ntry {\n  console.log(decodeURI(encoded));\n  // expected output: \"https://mozilla.org/?x=шеллы\"\n} catch (e) { // catches a malformed URI\n  console.error(e);\n}\n",
+      "id": 13
     }
   ]
 }

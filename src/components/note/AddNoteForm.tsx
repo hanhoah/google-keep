@@ -8,7 +8,6 @@ import { noteAPI } from "../../api/jsonserver";
 
 interface Props {
   addNote: (note: Note) => void;
-  renderNotes: () => JSX.Element[];
 }
 
 function AddNoteForm(props: Props) {

@@ -1,9 +1,9 @@
-import NoteItem from "../components/note/NoteItem";
 import Note from "../shared/types/Note";
-//import initialNotes from "../shared/notes";
 import AddNoteForm from "../components/note/AddNoteForm";
 import { useEffect, useState } from "react";
-import { noteAPI } from "../api/jsonserver";
+import NoteList from "../components/notelist/NoteList";
+import SearchForm from "../components/search/SearchForm";
+import AddCategory from "../components/categories/AddCategory";
 
 const getNotesFromDb = async (): Promise<Note[]> => {
   const uri = "http://localhost:3001/notes";
@@ -15,11 +15,15 @@ const getNotesFromDb = async (): Promise<Note[]> => {
 export default function Home() {
   const [notes, setNotes] = useState<Note[]>([]);
 
-  useEffect(() => {
-    console.log("Only running on mount");
+  const resetNotes = () => {
     getNotesFromDb().then((initialNotes) => {
       setNotes(initialNotes);
     });
+  };
+
+  useEffect(() => {
+    console.log("Only running on mount");
+    resetNotes();
   }, []);
 
   useEffect(() => {
@@ -32,47 +36,15 @@ export default function Home() {
     });
   }
 
-  function updateNote(note: Note) {
-    console.log("updating note", note);
-    //patchData(note);
-    noteAPI("PATCH", `notes/${note.id}`, note);
-  }
-
-  function deleteNote(note: Note) {
-    const result = notes.filter((current) => {
-      return current.id !== note.id;
-    });
-
-    setNotes(result);
-    //deleteItem(note);
-    noteAPI("DELETE", `notes/${note.id}`, note);
-  }
-
-  const renderNotes = () => {
-    {
-      return notes.map((note) => (
-        <NoteItem
-          key={note.id}
-          note={note}
-          deleteNote={deleteNote}
-          updateNote={updateNote}
-        />
-      ));
-    }
-  };
-  //console.log("notes: ", notes);
-
-  // general note list komponente
-  // results_note_list komponente
-  // z51 bis 62 in neue
-
   if (!notes) {
     return <p>loading...</p>;
   }
   return (
     <>
-      <AddNoteForm addNote={addNote} renderNotes={renderNotes} />
-      {renderNotes()}
+      <SearchForm setNotes={setNotes} resetNotes={resetNotes} />
+      <AddNoteForm addNote={addNote} />
+      <AddCategory />
+      <NoteList notes={notes} setNotes={setNotes} />
     </>
   );
 }

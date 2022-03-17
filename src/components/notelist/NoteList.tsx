@@ -1,13 +1,17 @@
-import React from "react";
+import React, { SetStateAction, useState } from "react";
 import { noteAPI } from "../../api/jsonserver";
 import Note from "../../shared/types/Note";
 import NoteItem from "../note/NoteItem";
 
 interface Props {
-    notes: Note[];
-  }
+  notes: Note[];
+  setNotes: (value: SetStateAction<Note[]>) => void;
+}
 
-function updateNote(note: Note) {
+function NoteList(props: Props) {
+  const notes = props.notes;
+
+  function updateNote(note: Note) {
     console.log("updating note", note);
     //patchData(note);
     noteAPI("PATCH", `notes/${note.id}`, note);
@@ -17,25 +21,22 @@ function updateNote(note: Note) {
     const result = notes.filter((current) => {
       return current.id !== note.id;
     });
-    
-    const renderNotes = () => {
-      {
-        return props.notes.map((note) => (
-          <NoteItem
-            key={note.id}
-            note={note}
-            deleteNote={deleteNote}
-            updateNote={updateNote}
-          />
-        ));
-      }
-    };
+    props.setNotes(result);
+    noteAPI("DELETE", `notes/${note.id}`, note);
+  }
 
-    if (!notes) {
-        return <p>loading...</p>;
-      }
-function NoteList(props: Props) {
-  return <div>NoteList</div>;
+  return (
+    <>
+      {notes.map((note) => (
+        <NoteItem
+          key={note.id}
+          note={note}
+          deleteNote={deleteNote}
+          updateNote={updateNote}
+        />
+      ))}
+    </>
+  );
 }
 
 export default NoteList;
