@@ -8,6 +8,7 @@ import { noteAPI } from "../../api/jsonserver";
 
 interface Props {
   addNote: (note: Note) => void;
+  renderNotes: () => JSX.Element[];
 }
 
 function AddNoteForm(props: Props) {
@@ -33,10 +34,11 @@ function AddNoteForm(props: Props) {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    props.addNote(note);
     setNote(emptyNote);
     //postData(note);
-    noteAPI("POST", "notes", note);
+    noteAPI<Note>("POST", "notes", note).then((newnote) => {
+      props.addNote(newnote);
+    });
   };
 
   return (

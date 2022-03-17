@@ -8,5 +8,7 @@
 .header > .h1 {
   color: #fff;
   font-family: "McLaren", cursive;
+  font-size: xx-large;
   font-weight: 200;
+  display: inline;
 }

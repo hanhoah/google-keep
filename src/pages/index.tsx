@@ -5,12 +5,10 @@ import AddNoteForm from "../components/note/AddNoteForm";
 import { useEffect, useState } from "react";
 import { noteAPI } from "../api/jsonserver";
 
-const getInitialNotes = async (): Promise<Note[]> => {
-  console.log("getInitialNotes");
+const getNotesFromDb = async (): Promise<Note[]> => {
   const uri = "http://localhost:3001/notes";
   const res = await fetch(uri);
   const notes = await res.json();
-  console.log("notes: ", notes);
   return notes;
 };
 
@@ -19,14 +17,14 @@ export default function Home() {
 
   useEffect(() => {
     console.log("Only running on mount");
-    getInitialNotes().then((initialNotes) => {
+    getNotesFromDb().then((initialNotes) => {
       setNotes(initialNotes);
     });
-  }, [notes]);
+  }, []);
 
   useEffect(() => {
-    console.log("Component did update");
-  });
+    console.log("running on notes change");
+  }, [notes]);
 
   function addNote(note: Note) {
     setNotes((prev) => {
@@ -50,19 +48,31 @@ export default function Home() {
     noteAPI("DELETE", `notes/${note.id}`, note);
   }
 
-  //console.log("notes: ", notes);
-
-  return (
-    <>
-      <AddNoteForm addNote={addNote} />
-      {notes.map((note) => (
+  const renderNotes = () => {
+    {
+      return notes.map((note) => (
         <NoteItem
           key={note.id}
           note={note}
           deleteNote={deleteNote}
           updateNote={updateNote}
         />
-      ))}
+      ));
+    }
+  };
+  //console.log("notes: ", notes);
+
+  // general note list komponente
+  // results_note_list komponente
+  // z51 bis 62 in neue
+
+  if (!notes) {
+    return <p>loading...</p>;
+  }
+  return (
+    <>
+      <AddNoteForm addNote={addNote} renderNotes={renderNotes} />
+      {renderNotes()}
     </>
   );
 }
